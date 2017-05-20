@@ -1,0 +1,10 @@
+lib base64=
+	base64.myr
+;;
+
+man=
+	base64_dlen.3
+	base64_elen.3
+	base64_decode.3
+	base64_encode.3
+;;
