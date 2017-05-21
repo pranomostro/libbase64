@@ -9,7 +9,7 @@
 .Sh SYNOPSIS
 .Sy use base64
 .Pp
-.Ft std.result(byte[:])
+.Ft std.result(void, byte[:])
 .Fo base64.decode
 .Fa "bufi : byte[:]" "bufo : byte[:]"
 .Fc
@@ -29,7 +29,9 @@ needs to be big enough to hold the decoded contents of
 .Fn base64.decode
 returns `std.Err e (e is an error message) if there was an
 error decoding the input (usually, the input was not base64 encoded),
-on success, it returns `std.Ok d, where d can be ignored.
+on success it returns `std.Ok d, where d is of type
+.Ft void
+and can be ignored.
 
 .Sh EXAMPLES
 .Bd -literal -offset indent
@@ -56,8 +58,8 @@ const main={
 
 .Sh SEE ALSO
 .Xr base64 1 ,
-.Xr base64.elen 3 ,
 .Xr base64.dlen 3 ,
+.Xr base64.elen 3 ,
 .Xr base64.encode 3 ,
 .Xr uudecode 1p ,
 .Xr uuencode 1p .

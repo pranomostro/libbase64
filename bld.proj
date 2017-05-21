@@ -8,7 +8,3 @@ man=
 	base64.decode.3
 	base64.encode.3
 ;;
-
-bin test=
-	test.myr
-;;

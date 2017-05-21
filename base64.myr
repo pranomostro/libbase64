@@ -29,7 +29,7 @@ const elen={buf
 }
 
 const decode={bufi, bufo
-	var i, j, b, l, r
+	var i, j, b, l
 	j=0
 	l=bufi.len
 
@@ -69,7 +69,7 @@ const decode={bufi, bufo
 			bufo[j++]=255&(b : byte)
 		;;
 	;;
-	-> `std.Ok r
+	-> `std.Ok void
 }
 
 const encode={bufi, bufo
