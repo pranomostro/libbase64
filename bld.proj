@@ -3,8 +3,12 @@ lib base64=
 ;;
 
 man=
-	base64_dlen.3
-	base64_elen.3
-	base64_decode.3
-	base64_encode.3
+	base64.dlen.3
+	base64.elen.3
+	base64.decode.3
+	base64.encode.3
+;;
+
+bin test=
+	test.myr
 ;;

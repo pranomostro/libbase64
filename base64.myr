@@ -3,7 +3,7 @@ use std
 pkg base64=
 	const dlen : (buf : byte[:] -> std.size)
 	const elen : (buf : byte[:] -> std.size)
-	const decode : (bufi : byte[:], bufo : byte[:] -> void)
+	const decode : (bufi : byte[:], bufo : byte[:] -> std.result(void, byte[:]))
 	const encode : (bufi : byte[:], bufo : byte[:] -> void)
 ;;
 
@@ -29,7 +29,7 @@ const elen={buf
 }
 
 const decode={bufi, bufo
-	var i, j, b, l
+	var i, j, b, l, r
 	j=0
 	l=bufi.len
 
@@ -39,13 +39,25 @@ const decode={bufi, bufo
 
 	for i=0; i<l; i+=4
 		b=0
-		b|=(std.get(std.lsearch(table, bufi[i], std.numcmp)) : uint64)<<18
-		b|=(std.get(std.lsearch(table, bufi[i+1], std.numcmp)) : uint64)<<12
+		match std.lsearch(table, bufi[i], std.numcmp)
+		| `std.None: -> `std.Err "input not base64 encoded";
+		| `std.Some d: b|=(d : uint64)<<18
+		;;
+		match std.lsearch(table, bufi[i+1], std.numcmp)
+		| `std.None: -> `std.Err "input not base64 encoded";
+		| `std.Some d: b|=(d : uint64)<<12
+		;;
 		if i+2<l
-			b|=(std.get(std.lsearch(table, bufi[i+2], std.numcmp)) : uint64)<<6
+			match std.lsearch(table, bufi[i+2], std.numcmp)
+			| `std.None: -> `std.Err "input not base64 encoded";
+			| `std.Some d: b|=(d : uint64)<<6
+			;;
 		;;
 		if i+3<l
-			b|=(std.get(std.lsearch(table, bufi[i+3], std.numcmp)) : uint64)
+			match std.lsearch(table, bufi[i+3], std.numcmp)
+			| `std.None: -> `std.Err "input not base64 encoded";
+			| `std.Some d: b|=(d : uint64)
+			;;
 		;;
 		if j<bufo.len
 			bufo[j++]=255&((b>>16) : byte)
@@ -57,6 +69,7 @@ const decode={bufi, bufo
 			bufo[j++]=255&(b : byte)
 		;;
 	;;
+	-> `std.Ok r
 }
 
 const encode={bufi, bufo

@@ -1,0 +1,67 @@
+.Dd May 21, 2017
+.Dt BASE64.DECODE 3
+.Os
+
+.Sh NAME
+.Nm base64.decode
+.Nd decode a base64 encoded byte slice
+
+.Sh SYNOPSIS
+.Sy use base64
+.Pp
+.Ft std.result(byte[:])
+.Fo base64.decode
+.Fa "bufi : byte[:]" "bufo : byte[:]"
+.Fc
+
+.Sh DESCRIPTION
+.Fn base64.decode
+decodes
+.Fa bufi
+from the base64 format into
+.Fa bufo
+into raw bytes.
+.Fa bufo
+needs to be big enough to hold the decoded contents of
+.Fa bufi .
+
+.Sh RETURN VALUES
+.Fn base64.decode
+returns `std.Err e (e is an error message) if there was an
+error decoding the input (usually, the input was not base64 encoded),
+on success, it returns `std.Ok d, where d can be ignored.
+
+.Sh EXAMPLES
+.Bd -literal -offset indent
+use std
+use base64
+
+const main={
+	var a, b, c
+
+	a="H0=67.3;\enΩb=4.89;\enΩm=31.5;\enτ=0.0925;\enAs=2.215e-9;\enns=0.9603;\en"
+	std.put(a)
+
+	b=std.slalloc(base64.elen(a))
+	base64.encode(a, b)
+	std.put("{}\en", b)
+
+	c=std.slalloc(base64.dlen(b))
+	match base64.decode(b, c)
+	| `std.Err e: std.fatal(e)
+	| `std.Ok d: std.put(c)
+	;;
+}
+.Ed
+
+.Sh SEE ALSO
+.Xr base64 1 ,
+.Xr base64.elen 3 ,
+.Xr base64.dlen 3 ,
+.Xr base64.encode 3 ,
+.Xr uudecode 1p ,
+.Xr uuencode 1p .
+
+.Sh STANDARDS
+.Fn base64.decode
+does not conform to any standards.
